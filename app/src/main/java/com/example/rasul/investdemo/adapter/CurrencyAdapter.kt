@@ -33,7 +33,6 @@ class CurrencyAdapter(internal var context: Context, internal var currencyList: 
             holder.buyPriceTxt.setTextColor(context.resources.getColor(android.R.color.holo_red_dark))
             holder.buyPriceTxt.setTextColor(context.resources.getColor(android.R.color.holo_red_dark))
         }
-
         holder.buyPriceTxt.text = currencyList[position].buyPrice
         holder.salePriceTxt.text = currencyList[position].sellPrice
         holder.spreadTxt.text = currencyList[position].spread.toString()

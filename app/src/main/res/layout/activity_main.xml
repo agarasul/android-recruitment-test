@@ -28,8 +28,8 @@
 
                 <ImageView
                     android:id="@+id/refreshBtn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     app:srcCompat="@drawable/ic_refresh_black_24dp" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
