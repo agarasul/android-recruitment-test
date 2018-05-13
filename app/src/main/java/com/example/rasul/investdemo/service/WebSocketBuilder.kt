@@ -6,11 +6,14 @@ import com.example.rasul.investdemo.view.IView
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
+import java.util.concurrent.TimeUnit
 
 class WebSocketBuilder {
 
     var client: OkHttpClient = OkHttpClient.Builder()
-            .retryOnConnectionFailure(true)
+            .connectTimeout(3000, TimeUnit.MILLISECONDS)
+            .readTimeout(3000, TimeUnit.MILLISECONDS)
+            .retryOnConnectionFailure(false)
             .build()
 
     private lateinit var webSocket: WebSocket

@@ -18,10 +18,6 @@ import org.json.JSONArray
 
 class MySocketListener(private var context: Context, private var mainView: IView.MainView) : WebSocketListener() {
 
-    override fun onOpen(webSocket: WebSocket, response: Response) {
-        super.onOpen(webSocket, response)
-    }
-
     override fun onMessage(webSocket: WebSocket?, response: String?) {
         super.onMessage(webSocket, response)
 
@@ -40,8 +36,9 @@ class MySocketListener(private var context: Context, private var mainView: IView
 
     override fun onFailure(webSocket: WebSocket?, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
+        mainView.onError(t)
         Log.d("AAAA", "CONNECTION IS LOST")
         t.printStackTrace()
-        mainView.onError(t)
+
     }
 }

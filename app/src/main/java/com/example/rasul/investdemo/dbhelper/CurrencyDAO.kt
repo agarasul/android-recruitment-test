@@ -4,6 +4,6 @@ import com.example.rasul.investdemo.entity.Result
 
 interface CurrencyDAO {
 
-    fun getAllCurrencies(): List<Result>
-    fun saveAllCurrencies(currencies: List<Result>):Boolean
+    fun getAllCurrencies(): ArrayList<Result>
+    fun saveAllCurrencies(currencies: List<Result>): Boolean
 }

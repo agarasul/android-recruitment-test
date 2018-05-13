@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.example.rasul.investdemo.entity.Result
 import java.io.IOException
 
+
 class SQLiteHelper(internal var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION), CurrencyDAO {
     companion object {
 
@@ -14,8 +15,8 @@ class SQLiteHelper(internal var context: Context) : SQLiteOpenHelper(context, DA
         private val DATABASE_NAME = "tbms.db"
         private val CURRENCY_TABLE = "Currencies"
         private val tableQuery = "CREATE TABLE " + CURRENCY_TABLE +
-                "    id             INTEGER      PRIMARY KEY AUTOINCREMENT\n" +
-                "                                UNIQUE\n" +
+                "    (id INTEGER PRIMARY KEY AUTOINCREMENT\n" +
+                "                                   UNIQUE\n" +
                 "                                NOT NULL,\n" +
                 "    currency_name  VARCHAR (50) NOT NULL,\n" +
                 "    currency_state VARCHAR (50) NOT NULL,\n" +
@@ -34,8 +35,25 @@ class SQLiteHelper(internal var context: Context) : SQLiteOpenHelper(context, DA
 
     }
 
-    override fun getAllCurrencies(): List<Result> {
-        return emptyList()
+    override fun getAllCurrencies(): ArrayList<Result> {
+        val resultList = ArrayList<Result>()
+        val selectQuery = "SELECT * FROM $CURRENCY_TABLE"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(selectQuery, null)
+        if (cursor.moveToFirst()) {
+            do {
+                val result = Result()
+                result.currencyName = cursor.getString(1)
+                result.currencyState = cursor.getString(2)
+                result.buyPrice = cursor.getString(3)
+                result.sellPrice = cursor.getString(4)
+                result.date = cursor.getString(5)
+                result.spread = cursor.getInt(6)
+                resultList.add(result)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        return resultList
     }
 
     override fun saveAllCurrencies(currencies: List<Result>): Boolean {
@@ -50,7 +68,11 @@ class SQLiteHelper(internal var context: Context) : SQLiteOpenHelper(context, DA
                 values.put("sellPrice", currency.sellPrice)
                 values.put("date", currency.date)
                 values.put("spread", currency.spread)
-                db.insert(CURRENCY_TABLE, null, values)
+
+                val id = db.insertWithOnConflict(CURRENCY_TABLE, null, values, SQLiteDatabase.CONFLICT_IGNORE).toInt()
+                if (id == -1) {
+                    db.update("your_table", values, null, arrayOf(id.toString()))  // number 1 is the _id here, update to variable for your code
+                }
             }
             db.close()
             return true
